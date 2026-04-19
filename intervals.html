@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connessione Intervals.icu</title>
+</head>
+<body style="text-align: center; font-family: -apple-system, sans-serif; padding-top: 50px; background: #f4f4f9;">
+    <h2>Autorizzazione Intervals.icu</h2>
+    <p id="status">Reindirizzamento all'app in corso...</p>
+
+    <script>
+        // 1. Recupera i parametri dall'URL (code e state)
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+
+        // 2. Definizione dello schema dell'app (usa lo stesso di Strava o uno nuovo)
+        // Ti consiglio di usare un path diverso (es. /intervals) per distinguerli nell'app
+        const appScheme = "com.tuo.cyclingtrainingcompanion://intervals";
+
+        if (code) {
+            // Costruiamo l'URL finale per l'app
+            // Passiamo sia il codice che lo stato per sicurezza
+            const finalUrl = `${appScheme}?code=${code}${state ? '&state=' + state : ''}`;
+
+            // Eseguiamo il reindirizzamento
+            window.location.href = finalUrl;
+
+            // Fallback se l'app non risponde
+            setTimeout(() => {
+                document.getElementById('status').innerHTML = 
+                    '<span style="color: red;">Se l\'app non si è aperta, clicca qui sotto:</span><br><br>' +
+                    `<a href="${finalUrl}" style="padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">Apri App</a>`;
+            }, 2500);
+        } else {
+            document.getElementById('status').innerText = "Errore: Nessun codice di autorizzazione trovato.";
+        }
+    </script>
+</body>
+</html>
